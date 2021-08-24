@@ -9,9 +9,9 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoibW9taXIiLCJhIjoiY2tzcWxmb3ZtMGR4cjJ2bzM0bjM5ZG5
 
 function Root() {
   const [viewport, setViewport] = useState({
-    latitude: 20.4612,
-    longitude: 44.8125,
-    zoom: 14,
+    latitude: 44.8125,
+    longitude: 20.4612,
+    zoom: 12,
     bearing: 0,
     pitch: 0
   });
