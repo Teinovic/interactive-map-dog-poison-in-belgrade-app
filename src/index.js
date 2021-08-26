@@ -21,6 +21,7 @@ function Root() {
     pitch: 0
   });
   
+  const [currentCoord, setCurrentCoord] = useState('')
   const mapRef = useRef();
   const handleViewportChange = useCallback(
     (newViewport) => setViewport(newViewport),
@@ -51,9 +52,13 @@ function Root() {
         mapStyle="mapbox://styles/momir/cksreww3122s318o53of6nu8c"
         onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN} 
-        onMouseMove={
-          console.log('A mousemove event has occurred.')}
+        onMouseMove={(e) => {
+          return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
+        }}
       >
+        <Coordinates>
+          {currentCoord}
+        </Coordinates>
         <Geocoder
           placeholder="Search here!"
           mapRef={mapRef}
