@@ -1,9 +1,9 @@
 
 /* global document */
 import * as React from 'react';
-import { useState, useRef, forwardRef,useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { render } from 'react-dom';
-import MapGL, {Marker, LngLat} from 'react-map-gl';
+import MapGL from 'react-map-gl';
 import App from './App';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from './components/coordinates';
@@ -13,6 +13,9 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoibW9taXIiLCJhIjoiY2tzcWxmb3ZtMGR4cjJ2bzM0bjM5ZG5
 
 
 function Root() {
+
+
+
   const [viewport, setViewport] = useState({
     latitude: 44.8125,
     longitude: 20.4612,
@@ -41,6 +44,21 @@ function Root() {
     },
     [handleViewportChange]
   );
+  
+  const [dbState, setDbState] = useState([])
+
+  async function fetchData() {
+    const res = await fetch('http://127.0.0.1:8000/interactivemap/api/interactivemap/');
+    const coordArray = await res.json();
+    console.log(coordArray)
+    setDbState(coordArray)
+    console.log(dbState)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
 
   return (
     <div style={{ height: "100vh" }}>
@@ -64,6 +82,7 @@ function Root() {
         <Coordinates>
           {currentCoord}
           {dogPoisonCoord}
+          {JSON.stringify(dbState)}
         </Coordinates>
         <Geocoder
           placeholder="Search here!"
