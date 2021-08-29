@@ -21,6 +21,7 @@ function Root() {
     pitch: 0
   });
   
+  const [dogPoisonCoord, setDogPoisonCoord] = useState([])
   const [currentCoord, setCurrentCoord] = useState('')
   const mapRef = useRef();
   const handleViewportChange = useCallback(
@@ -52,12 +53,17 @@ function Root() {
         mapStyle="mapbox://styles/momir/cksreww3122s318o53of6nu8c"
         onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN} 
+        onClick={e => setDogPoisonCoord(coord => {
+          console.log('clicked')
+          return [e.lngLat, ...coord]
+        })}
         onMouseMove={(e) => {
           return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
         }}
       >
         <Coordinates>
           {currentCoord}
+          {dogPoisonCoord}
         </Coordinates>
         <Geocoder
           placeholder="Search here!"
