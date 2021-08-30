@@ -22,7 +22,7 @@ function Root() {
     pitch: 0
   });
   
-  const [dogPoisonCoord, setDogPoisonCoord] = useState([])
+  const [dogPoisonCoord, setDogPoisonCoord] = useState('')
   const [currentCoord, setCurrentCoord] = useState('')
   const mapRef = useRef();
   const handleViewportChange = useCallback(
@@ -77,9 +77,10 @@ function Root() {
           return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
         }}
       >
-        <Marker latitude={44.81} longitude={20.43} offsetLeft={-20} offsetTop={-10}>
-          <div>You are here</div>
-        </Marker>
+        {dogPoisonCoord ? 
+        <Marker latitude={dogPoisonCoord[0][1]} longitude={dogPoisonCoord[0][0]} offsetLeft={-20} offsetTop={-10}>
+          <div>HERE</div>
+        </Marker> : console.log('wutface')}
         <Coordinates>
           {currentCoord}
           {dogPoisonCoord}
