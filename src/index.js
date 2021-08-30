@@ -3,19 +3,17 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { render } from 'react-dom';
-import MapGL from 'react-map-gl';
+import MapGL, {Marker} from 'react-map-gl';
 import App from './App';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from './components/coordinates';
+import MarkerContainer from './components/marker';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibW9taXIiLCJhIjoiY2tzcWxmb3ZtMGR4cjJ2bzM0bjM5ZG5lNyJ9.QT_n1D2H-nL1RxhbcyycRA'; // Set your mapbox token here
 
 
 
 function Root() {
-
-
-
   const [viewport, setViewport] = useState({
     latitude: 44.8125,
     longitude: 20.4612,
@@ -72,17 +70,20 @@ function Root() {
         onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN} 
         onClick={e => setDogPoisonCoord(coord => {
-          console.log('clicked')
+          console.log(dogPoisonCoord)
           return [e.lngLat, ...coord]
         })}
         onMouseMove={(e) => {
           return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
         }}
       >
+        <Marker latitude={44.81} longitude={20.43} offsetLeft={-20} offsetTop={-10}>
+          <div>You are here</div>
+        </Marker>
         <Coordinates>
           {currentCoord}
           {dogPoisonCoord}
-          {JSON.stringify(dbState)}
+          {/* {JSON.stringify(dbState)} */}
         </Coordinates>
         <Geocoder
           placeholder="Search here!"
