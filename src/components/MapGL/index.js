@@ -68,8 +68,14 @@ export default function Map({ children, ...restProps }) {
             }}
         >
             {dogPoisonCoord && 
-            <Marker  longitude={dogPoisonCoord[0][0]} latitude={dogPoisonCoord[0][1]} offsetLeft={-20} offsetTop={-10}>
-                <img src="pin.png" style={{width: 20, height: 33}} />
+            <Marker  
+                longitude={dogPoisonCoord[0][0]} 
+                latitude={dogPoisonCoord[0][1]} 
+                offsetLeft={-20} 
+                offsetTop={-10}
+                onClick={() => alert(`hello`)}
+            >
+                <img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}} />
             </Marker>}
             <Coordinates>
                 {currentCoord}
