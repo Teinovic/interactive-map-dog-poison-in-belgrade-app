@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import MapGL, {Marker} from 'react-map-gl';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from '../coordinates'
+import axios from 'axios';
 
 const MAPBOX_TOKEN =  'pk.eyJ1IjoibW9taXIiLCJhIjoiY2tzcWxmb3ZtMGR4cjJ2bzM0bjM5ZG5lNyJ9.QT_n1D2H-nL1RxhbcyycRA'
 
@@ -50,6 +51,17 @@ export default function Map({ children, ...restProps }) {
         fetchData()
       }, [])
     
+      
+
+    useEffect(() => {
+      if (dogPoisonCoord) {
+        axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
+          coordinates: (dogPoisonCoord[0][0], dogPoisonCoord[0][1]),
+          type_of_poison: 'rat_poison',
+          cleared: false
+        })};
+    }, [dogPoisonCoord])
+    
     return (
         <MapGL
             ref={mapRef}       
@@ -60,7 +72,7 @@ export default function Map({ children, ...restProps }) {
             onViewportChange={setViewport}
             mapboxApiAccessToken={MAPBOX_TOKEN} 
             onClick={e => setDogPoisonCoord(coord => {
-                console.log(dogPoisonCoord)
+                console.log('dpcoord', dogPoisonCoord)
                 return [e.lngLat, ...coord]
             })}
             onMouseMove={(e) => {
@@ -79,16 +91,16 @@ export default function Map({ children, ...restProps }) {
             </Marker>}
             <Coordinates>
                 {currentCoord}
-                {dogPoisonCoord}
-            {/* {JSON.stringify(dbState)} */}
+                {/* {dogPoisonCoord} */}
+              {JSON.stringify(dbState)}
             </Coordinates>
-            <Geocoder
+            {/* <Geocoder
                 placeholder="Search here!"
                 mapRef={mapRef}
                 onViewportChange={handleGeocoderViewportChange}
                 mapboxApiAccessToken={MAPBOX_TOKEN}
                 position="top-left"
-            />
+            /> */}
         </MapGL>
         )
 }
