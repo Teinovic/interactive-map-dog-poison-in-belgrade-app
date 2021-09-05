@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import App from './App';
 import Map from './components/MapGL'
-
+import MarkerPopupContainer from './containers/markerPopup/MarkerPopup';
 
 
 function Root() {
@@ -10,6 +10,7 @@ function Root() {
     <div style={{ height: "100vh" }}>
       <App />
       <Map />
+      <MarkerPopupContainer />
     </div>
   );
 }

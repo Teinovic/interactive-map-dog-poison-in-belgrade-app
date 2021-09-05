@@ -1,9 +1,10 @@
 import React from 'react'
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MapGL, {Marker} from 'react-map-gl';
+import MapGL, {Marker, Popup} from 'react-map-gl';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from '../coordinates'
 import axios from 'axios';
+import MarkerPopupContainer from '../../containers/markerPopup/MarkerPopup';
 
 const MAPBOX_TOKEN =  'pk.eyJ1IjoibW9taXIiLCJhIjoiY2tzcWxmb3ZtMGR4cjJ2bzM0bjM5ZG5lNyJ9.QT_n1D2H-nL1RxhbcyycRA'
 
@@ -15,6 +16,8 @@ export default function Map({ children, ...restProps }) {
         bearing: 0,
         pitch: 0
       });
+
+      const [showPopup, togglePopup] = useState(true);
       
       const [dogPoisonCoord, setDogPoisonCoord] = useState('')
       const [currentCoord, setCurrentCoord] = useState('')
@@ -56,7 +59,7 @@ export default function Map({ children, ...restProps }) {
     useEffect(() => {
       if (dogPoisonCoord) {
         axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
-          coordinates: (dogPoisonCoord[0][0], dogPoisonCoord[0][1]),
+          coordinates: (dogPoisonCoord[0].join(', ')),
           type_of_poison: 'rat_poison',
           cleared: false
         })};
@@ -85,7 +88,8 @@ export default function Map({ children, ...restProps }) {
                 latitude={dogPoisonCoord[0][1]} 
                 offsetLeft={-20} 
                 offsetTop={-10}
-                onClick={() => alert(`hello`)}
+                togglePopup={<MarkerPopupContainer/>}
+
             >
                 <img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}} />
             </Marker>}
@@ -101,6 +105,15 @@ export default function Map({ children, ...restProps }) {
                 mapboxApiAccessToken={MAPBOX_TOKEN}
                 position="top-left"
             /> */}
+            {showPopup && <Popup
+          latitude={44.8125}
+          longitude={20.4612}
+          closeButton={true}
+          closeOnClick={false}
+          onClose={() => togglePopup(false)}
+          anchor="top" >
+          <div>You are here</div>
+        </Popup>}
         </MapGL>
         )
 }
