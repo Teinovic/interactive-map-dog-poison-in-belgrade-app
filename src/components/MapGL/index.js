@@ -17,9 +17,10 @@ export default function Map({ children, ...restProps }) {
         pitch: 0
       });
 
-      const [showPopup, togglePopup] = useState(true);
+      const [showPopup, togglePopup] = useState(false);
       
       const [dogPoisonCoord, setDogPoisonCoord] = useState('')
+      const [dogPoisonCoordConfirmed, setDogPoisonCoordConfirmed] = useState('')
       const [currentCoord, setCurrentCoord] = useState('')
       const mapRef = useRef();
       const handleViewportChange = useCallback(
@@ -57,9 +58,9 @@ export default function Map({ children, ...restProps }) {
       
 
     useEffect(() => {
-      if (dogPoisonCoord) {
+      if (dogPoisonCoordConfirmed) {
         axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
-          coordinates: (dogPoisonCoord[0].join(', ')),
+          coordinates: (dogPoisonCoordConfirmed[0].join(', ')),
           type_of_poison: 'rat_poison',
           cleared: false
         })};
@@ -75,9 +76,9 @@ export default function Map({ children, ...restProps }) {
             onViewportChange={setViewport}
             mapboxApiAccessToken={MAPBOX_TOKEN} 
             onClick={e => setDogPoisonCoord(coord => {
-                console.log('dpcoord', dogPoisonCoord)
-                return [e.lngLat, ...coord]
-            })}
+              console.log('dpcoord', dogPoisonCoord)
+              return [e.lngLat, ...coord]
+          })}
             onMouseMove={(e) => {
                 return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
             }}
@@ -88,10 +89,12 @@ export default function Map({ children, ...restProps }) {
                 latitude={dogPoisonCoord[0][1]} 
                 offsetLeft={-20} 
                 offsetTop={-10}
-                togglePopup={<MarkerPopupContainer/>}
 
             >
                 <img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}} />
+                <MarkerPopupContainer
+                  dogPoisonCoord={dogPoisonCoord}
+                />
             </Marker>}
             <Coordinates>
                 {currentCoord}
