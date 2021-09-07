@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MapGL, {Marker, Popup} from 'react-map-gl';
+import MapGL, {Marker} from 'react-map-gl';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from '../coordinates'
 import axios from 'axios';
@@ -17,11 +17,11 @@ export default function Map({ children, ...restProps }) {
         pitch: 0
       });
 
-      const [showPopup, togglePopup] = useState(false);
       
       const [dogPoisonCoord, setDogPoisonCoord] = useState('')
       const [dogPoisonCoordConfirmed, setDogPoisonCoordConfirmed] = useState('')
       const [currentCoord, setCurrentCoord] = useState('')
+      const [currentMarkerCoord, setCurrentMarkerCoord] = useState('')
       const mapRef = useRef();
       const handleViewportChange = useCallback(
         (newViewport) => setViewport(newViewport),
@@ -75,18 +75,19 @@ export default function Map({ children, ...restProps }) {
             mapStyle="mapbox://styles/momir/cksreww3122s318o53of6nu8c"
             onViewportChange={setViewport}
             mapboxApiAccessToken={MAPBOX_TOKEN} 
-            onClick={e => setDogPoisonCoord(coord => {
-              console.log('dpcoord', dogPoisonCoord)
-              return [e.lngLat, ...coord]
-          })}
+            onClick={e => 
+              {setDogPoisonCoord(coord => [e.lngLat, ...coord]);
+              setCurrentMarkerCoord(e.lngLat);
+              console.log(dogPoisonCoord)}
+          }
             onMouseMove={(e) => {
                 return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
             }}
         >
-            {dogPoisonCoord && 
+            {currentMarkerCoord && 
             <Marker  
-                longitude={dogPoisonCoord[0][0]} 
-                latitude={dogPoisonCoord[0][1]} 
+                longitude={currentMarkerCoord[0]} 
+                latitude={currentMarkerCoord[1]} 
                 offsetLeft={-20} 
                 offsetTop={-10}
 
@@ -94,6 +95,9 @@ export default function Map({ children, ...restProps }) {
                 <img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}} />
                 <MarkerPopupContainer
                   dogPoisonCoord={dogPoisonCoord}
+                  setDogPoisonCoord={setDogPoisonCoord}
+                  dogPoisonCoordConfirmed={dogPoisonCoordConfirmed}
+                  setDogPoisonCoordConfirmed={setDogPoisonCoordConfirmed}
                 />
             </Marker>}
             <Coordinates>
@@ -108,15 +112,6 @@ export default function Map({ children, ...restProps }) {
                 mapboxApiAccessToken={MAPBOX_TOKEN}
                 position="top-left"
             /> */}
-            {showPopup && <Popup
-          latitude={44.8125}
-          longitude={20.4612}
-          closeButton={true}
-          closeOnClick={false}
-          onClose={() => togglePopup(false)}
-          anchor="top" >
-          <div>You are here</div>
-        </Popup>}
         </MapGL>
         )
 }
