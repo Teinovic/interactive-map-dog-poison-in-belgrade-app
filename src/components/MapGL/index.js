@@ -17,7 +17,7 @@ export default function Map({ children, ...restProps }) {
         pitch: 0
       });
 
-      
+      const [toggle, setToggle] = useState(true)
       const [dogPoisonCoord, setDogPoisonCoord] = useState('')
       const [dogPoisonCoordConfirmed, setDogPoisonCoordConfirmed] = useState('')
       const [currentCoord, setCurrentCoord] = useState('')
@@ -64,7 +64,7 @@ export default function Map({ children, ...restProps }) {
           type_of_poison: 'rat_poison',
           cleared: false
         })};
-    }, [dogPoisonCoord])
+    }, [dogPoisonCoordConfirmed])
     
     return (
         <MapGL
@@ -74,11 +74,11 @@ export default function Map({ children, ...restProps }) {
             height="50vh"
             mapStyle="mapbox://styles/momir/cksreww3122s318o53of6nu8c"
             onViewportChange={setViewport}
-            mapboxApiAccessToken={MAPBOX_TOKEN} 
+            mapboxApiAccessToken={MAPBOX_TOKEN}
             onClick={e => 
               {setDogPoisonCoord(coord => [e.lngLat, ...coord]);
               setCurrentMarkerCoord(e.lngLat);
-              console.log(dogPoisonCoord)}
+              setToggle(true)}
           }
             onMouseMove={(e) => {
                 return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
@@ -92,8 +92,12 @@ export default function Map({ children, ...restProps }) {
                 offsetTop={-10}
 
             >
-                <img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}} />
+                <img 
+                  src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}   
+                />
                 <MarkerPopupContainer
+                  visibility={toggle}
+                  setToggle={setToggle} 
                   dogPoisonCoord={dogPoisonCoord}
                   setDogPoisonCoord={setDogPoisonCoord}
                   dogPoisonCoordConfirmed={dogPoisonCoordConfirmed}

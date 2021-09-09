@@ -1,6 +1,7 @@
-import { Container, Coord, Input, ConfirmationButton, CancelButton } from './styles/markerPopup'
+import { Container, Coord, Input, ConfirmationButton, CancelButton, DeleteButton } from './styles/markerPopup'
 
 export default function MarkerPopup({ children, ...restProps }) {
+    console.log(restProps)
     return (
         <Container { ...restProps }>{ children }</Container>
     )
@@ -27,5 +28,11 @@ MarkerPopup.ConfirmationButton = function Button({ children, ...restProps }) {
 MarkerPopup.CancelButton = function Button({ children, ...restProps }) {
     return (
         <CancelButton { ...restProps }>{ children }</CancelButton>
+    )
+}
+
+MarkerPopup.DeleteButton = function Button({ children, ...restProps }) {
+    return (
+        <DeleteButton { ...restProps }>{ children }</DeleteButton>
     )
 }

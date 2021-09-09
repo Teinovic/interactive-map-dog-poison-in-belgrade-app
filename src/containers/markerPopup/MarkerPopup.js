@@ -1,29 +1,31 @@
 import MarkerPopup from "../../components/markerPopup";
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 export default function MarkerPopupContainer(props) {
-    // console.log(props, 'props')
-    let display = 'block'
+    console.log(props, 'props')
+
+    const [dogPoisonCoordToDelete, setDogPoisonCoordToDelete] = useState('')
 
     useEffect(() => {
-        if (props.dogPoisonCoordConfirmed) {
-          axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
-            coordinates: (props.dogPoisonCoordConfirmed[0].join(', ')),
-            type_of_poison: 'rat_poison',
-            cleared: false
-          })};
-      }, [props.dogPoisonCoordConfirmed])
+        if (dogPoisonCoordToDelete) {       
+            axios.delete('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {data: {
+                coordinates: (dogPoisonCoordToDelete.join(', ')),
+                type_of_poison: 'rat_poison',
+                cleared: false}})
+        }}, [dogPoisonCoordToDelete])
 
     return (
-        <MarkerPopup style={{display: display}}>
+        <MarkerPopup visibility={props.visibility}>
             <MarkerPopup.Coord>1234</MarkerPopup.Coord>
             <MarkerPopup.PoisonInput />
             <MarkerPopup.ConfirmationButton
-                onClick={() => props.setDogPoisonCoordConfirmed(coord => {
+                onClick={() => {props.setDogPoisonCoordConfirmed(coord => {
                     // console.log('dpcoord', props.dogPoisonCoord)
-                    return [props.dogPoisonCoord[0], ...coord]
-                })}
+                                    return [props.dogPoisonCoord[0], ...coord]
+                                }); 
+                                    // props.setToggle(false)
+                                }}
             >
                 confirm
             </MarkerPopup.ConfirmationButton>
@@ -32,11 +34,20 @@ export default function MarkerPopupContainer(props) {
                                     coord.shift()
                                     return coord
                                     });              
-                                return display = 'none'}
+                                props.setToggle(false)}
                 }
             >
                 cancel
             </MarkerPopup.CancelButton>
+            <MarkerPopup.DeleteButton
+                onClick={() => {setDogPoisonCoordToDelete(props.currentMarkerCoord);
+                                // props.setToggle(false)
+                                }
+                        } 
+                
+            >
+                Delete
+            </MarkerPopup.DeleteButton>
         </MarkerPopup>
     )
 }

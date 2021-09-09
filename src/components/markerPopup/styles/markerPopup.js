@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-    display: block;
+    display: ${props => props.visibility? 'block': 'none'};
     position: absolute;
     background-color: white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -31,6 +31,31 @@ export const ConfirmationButton = styled.a`
     }
 ` 
 export const CancelButton = styled.button`
-
+    text-align: left;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    padding: 0.2;
+    margin-bottom: 0.5rem;
+    color: black;
+    :hover,
+    :focus {
+        color: #5DE0D3;
+        cursor: pointer;
+    }
 ` 
 
+export const DeleteButton = styled.button`
+    text-align: left;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    padding: 0.2;
+    margin-bottom: 0.5rem;
+    color: black;
+    :hover,
+    :focus {
+        color: #5DE0D3;
+        cursor: pointer;
+    }
+` 
