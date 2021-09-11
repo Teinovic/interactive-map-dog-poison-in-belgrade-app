@@ -102,6 +102,8 @@ export default function Map({ children, ...restProps }) {
                   setDogPoisonCoord={setDogPoisonCoord}
                   dogPoisonCoordConfirmed={dogPoisonCoordConfirmed}
                   setDogPoisonCoordConfirmed={setDogPoisonCoordConfirmed}
+                  currentMarkerCoord={currentMarkerCoord}
+                  setCurrentMarkerCoord={setCurrentMarkerCoord}
                 />
             </Marker>}
             <Coordinates>
