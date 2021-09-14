@@ -1,4 +1,4 @@
-import { Container, Coord, Input, ConfirmationButton, CancelButton, DeleteButton } from './styles/markerPopup'
+import { Container, Coord, Input, ConfirmationButton, CancelButton, DeleteButton, Img } from './styles/markerPopup'
 
 export default function MarkerPopup({ children, ...restProps }) {
     return (
@@ -35,3 +35,10 @@ MarkerPopup.DeleteButton = function Button({ children, ...restProps }) {
         <DeleteButton { ...restProps }>{ children }</DeleteButton>
     )
 }
+
+MarkerPopup.Img = function PinImage({ restProps }) {
+    return (
+        <Img { ...restProps } />
+    )
+}
+

@@ -5,37 +5,50 @@ import axios from "axios";
 export default function MarkerPopupContainer(props) {
 
     const [dogPoisonCoordToDelete, setDogPoisonCoordToDelete] = useState('')
-    const [dbState, setDbState] = useState('')
 
-    async function fetchData() {
-        
+    const handlePoisonTypeInput = e => {
+      props.setTypeOfPoison(e.target.value)
+    }
+
+
+    async function deleteCoordFromDB() {        
         const res = await fetch('http://127.0.0.1:8000/interactivemap/api/interactivemap/');
         const coordArray = await res.json();
-        console.log(coordArray)
-        setDbState(coordArray)
         if (dogPoisonCoordToDelete){
-            const found = dbState.find(element => element.coordinates === dogPoisonCoordToDelete)
-            axios.delete(`http://127.0.0.1:8000/interactivemap/api/interactivemap/${found.id}`)
+            console.log(dogPoisonCoordToDelete, 'dogpoisoncoordtodelete')
+            const found = await coordArray.find(element => element.coordinates === dogPoisonCoordToDelete)
+            found && axios.delete(`http://127.0.0.1:8000/interactivemap/api/interactivemap/${found.id}`)
         }
     }
-      useEffect(() => {
-        fetchData()
-      }, [dogPoisonCoordToDelete])
+    useEffect(() => {
+        deleteCoordFromDB()
+    }, [dogPoisonCoordToDelete])
+
+    const handleCleared = () => {
+        props.setCleared(!props.cleared);
+    };
 
 
-    // useEffect(() => {
-    //     if (dogPoisonCoordToDelete) {       
-    //         axios.delete(`http://127.0.0.1:8000/interactivemap/api/interactivemap/?coordinates=${dogPoisonCoordToDelete}`)
-    //         }}, 
-    //         [dogPoisonCoordToDelete])
 
     return (
         <MarkerPopup visibility={props.visibility}>
-            <MarkerPopup.Coord>1234</MarkerPopup.Coord>
-            <MarkerPopup.PoisonInput />
+            <p>Coordinates:</p>
+            <MarkerPopup.Img src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}/>
+            <MarkerPopup.Coord>
+                {props.currentMarkerCoord[0].toFixed(4) + 'E, ' + props.currentMarkerCoord[1].toFixed(4) +'N'}
+            </MarkerPopup.Coord>
+            <MarkerPopup.PoisonInput value={props.typeOfPoison} onChange={handlePoisonTypeInput}/>
+            <br />
+            <p>
+                Cleared? 
+                <MarkerPopup.PoisonInput 
+                    type="checkbox"
+                    onChange={handleCleared}
+                />
+            </p>
             <MarkerPopup.ConfirmationButton
                 onClick={() => {props.setDogPoisonCoordConfirmed(coord => {
-                    // console.log('dpcoord', props.dogPoisonCoord)
+                                console.log('dpcoord', props.dogPoisonCoord)
                                     return [props.dogPoisonCoord[0], ...coord]
                                 }); 
                                     // props.setToggle(false)

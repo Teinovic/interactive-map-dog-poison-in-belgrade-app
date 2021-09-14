@@ -59,3 +59,7 @@ export const DeleteButton = styled.button`
         cursor: pointer;
     }
 ` 
+
+export const Img = styled.image`
+
+`

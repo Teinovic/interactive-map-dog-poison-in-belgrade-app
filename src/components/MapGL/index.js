@@ -23,6 +23,10 @@ export default function Map({ children, ...restProps }) {
       const [currentCoord, setCurrentCoord] = useState('')
       const [currentMarkerCoord, setCurrentMarkerCoord] = useState('')
       const mapRef = useRef();
+      const [typeOfPoison, setTypeOfPoison] = useState('')
+      const [cleared, setCleared] = useState('')
+
+
       const handleViewportChange = useCallback(
         (newViewport) => setViewport(newViewport),
         []
@@ -61,8 +65,8 @@ export default function Map({ children, ...restProps }) {
       if (dogPoisonCoordConfirmed) {
         axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
           coordinates: (dogPoisonCoordConfirmed[0].join(', ')),
-          type_of_poison: 'rat_poison',
-          cleared: false
+          type_of_poison: typeOfPoison,
+          cleared: cleared
         })};
     }, [dogPoisonCoordConfirmed])
     
@@ -70,8 +74,8 @@ export default function Map({ children, ...restProps }) {
         <MapGL
             ref={mapRef}       
             {...viewport}
-            width="50vw"
-            height="50vh"
+            width="70vw"
+            height="70vh"
             mapStyle="mapbox://styles/momir/cksreww3122s318o53of6nu8c"
             onViewportChange={setViewport}
             mapboxApiAccessToken={MAPBOX_TOKEN}
@@ -92,9 +96,9 @@ export default function Map({ children, ...restProps }) {
                 offsetTop={-10}
 
             >
-                <img 
+                {/* <img 
                   src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}   
-                />
+                /> */}
                 <MarkerPopupContainer
                   visibility={toggle}
                   setToggle={setToggle} 
@@ -104,6 +108,10 @@ export default function Map({ children, ...restProps }) {
                   setDogPoisonCoordConfirmed={setDogPoisonCoordConfirmed}
                   currentMarkerCoord={currentMarkerCoord}
                   setCurrentMarkerCoord={setCurrentMarkerCoord}
+                  typeOfPoison={typeOfPoison}
+                  setTypeOfPoison={setTypeOfPoison}
+                  cleared={cleared}
+                  setCleared={setCleared}
                 />
             </Marker>}
             <Coordinates>
@@ -111,6 +119,7 @@ export default function Map({ children, ...restProps }) {
                 {/* {dogPoisonCoord} */}
               {JSON.stringify(dbState)}
             </Coordinates>
+            
             {/* <Geocoder
                 placeholder="Search here!"
                 mapRef={mapRef}
