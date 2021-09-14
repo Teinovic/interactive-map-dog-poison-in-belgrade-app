@@ -25,6 +25,28 @@ export default function Map({ children, ...restProps }) {
       const mapRef = useRef();
       const [typeOfPoison, setTypeOfPoison] = useState('')
       const [cleared, setCleared] = useState('')
+      const [dbState, setDbState] = useState([])
+
+      const coordListElements = dbState.map(item => {
+        let [coord1, coord2] = item.coordinates.split(',')
+        console.log(coord1, coord2)
+        coord1 = Number(coord1)
+        coord2 = Number(coord2)
+        
+        return (
+          <Marker  
+            longitude={coord1} 
+            latitude={coord2} 
+            offsetLeft={-20} 
+            offsetTop={-10}
+          >
+            <img 
+                    src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}   
+            />
+          </Marker>
+          )
+        }
+      )
 
 
       const handleViewportChange = useCallback(
@@ -45,12 +67,10 @@ export default function Map({ children, ...restProps }) {
         [handleViewportChange]
       );
       
-      const [dbState, setDbState] = useState([])
     
       async function fetchData() {
         const res = await fetch('http://127.0.0.1:8000/interactivemap/api/interactivemap/');
         const coordArray = await res.json();
-        console.log(coordArray)
         setDbState(coordArray)
         console.log(dbState)
       }
@@ -88,6 +108,7 @@ export default function Map({ children, ...restProps }) {
                 return setCurrentCoord(e.lngLat[0].toFixed(4) + " " + e.lngLat[1].toFixed(4));
             }}
         >
+            {coordListElements}
             {currentMarkerCoord && 
             <Marker  
                 longitude={currentMarkerCoord[0]} 
