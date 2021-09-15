@@ -26,13 +26,16 @@ export default function Map({ children, ...restProps }) {
       const [typeOfPoison, setTypeOfPoison] = useState('')
       const [cleared, setCleared] = useState('')
       const [dbState, setDbState] = useState([])
+      const [popup, togglePopup] = useState(false)
+      console.log(dbState)
 
+      let found = dbState.find(element => element.id === popup)
 
       const coordListElements = dbState.map(item => {
         let [coord1, coord2] = item.coordinates.split(',')
         coord1 = Number(coord1)
         coord2 = Number(coord2)
-        
+
         return (
           <Marker  
             longitude={coord1} 
@@ -43,29 +46,12 @@ export default function Map({ children, ...restProps }) {
           >
             <img 
               src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}
-              onClick={e => alert(`coordinates of the poison: ${item.coordinates}, type of poison: ${item.type_of_poison}, cleared: ${item.cleared}`)}   
+              onClick={() => togglePopup(item.id)}   
             />
           </Marker>
           )
         }
       )
-
-      function CustomPopup(item, coord1, coord2, closePopup) {
-        return (
-          <Popup
-            latitude={coord1}
-            longitude={coord2}
-            onClose={closePopup}
-            closeButton={true}
-            closeOnClick={false}
-            offsetTop={-30}
-           >
-            <p>{item.coordinates}</p>
-            <p>{item.type_of_poison}</p>
-            <p>{item.cleared}</p>
-          </Popup>
-        )};
-
 
       const handleViewportChange = useCallback(
         (newViewport) => setViewport(newViewport),
@@ -127,6 +113,19 @@ export default function Map({ children, ...restProps }) {
             }}
         >
             {coordListElements}
+            {/* {console.log(Number(dbState[popup].coordinates.slice(0, 17)))} */}
+            {popup && <Popup
+                    longitude={Number(found.coordinates.slice(0, 17))}
+                    latitude={Number(found.coordinates.slice(20))}
+                    closeButton={true}
+                    closeOnClick={false}
+                    onClose={() => togglePopup(false)}
+                    anchor="top" >
+                    <p>{found.coordinates}</p>
+                    <p>{found.type_of_poison}</p>
+                    <p>{found.cleared}</p>
+                    
+            </Popup>}
             {currentMarkerCoord && 
             <Marker  
                 longitude={currentMarkerCoord[0]} 
@@ -156,7 +155,7 @@ export default function Map({ children, ...restProps }) {
             <Coordinates>
                 {currentCoord}
                 {/* {dogPoisonCoord} */}
-              {JSON.stringify(dbState)}
+              {/* {JSON.stringify(dbState)} */}
             </Coordinates>
             
             {/* <Geocoder
