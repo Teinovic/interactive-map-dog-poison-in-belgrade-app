@@ -29,7 +29,6 @@ export default function Map({ children, ...restProps }) {
 
       const coordListElements = dbState.map(item => {
         let [coord1, coord2] = item.coordinates.split(',')
-        console.log(coord1, coord2)
         coord1 = Number(coord1)
         coord2 = Number(coord2)
         
@@ -39,9 +38,11 @@ export default function Map({ children, ...restProps }) {
             latitude={coord2} 
             offsetLeft={-20} 
             offsetTop={-10}
+            
           >
             <img 
-                    src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}   
+              src="pin.png" style={{width: 20, height: 33, cursor: 'pointer'}}
+              onClick={e => alert(`coordinates of the poison: ${item.coordinates}, type of poison: ${item.type_of_poison}, cleared: ${item.cleared}`)}   
             />
           </Marker>
           )
@@ -85,8 +86,8 @@ export default function Map({ children, ...restProps }) {
       if (dogPoisonCoordConfirmed) {
         axios.post('http://127.0.0.1:8000/interactivemap/api/interactivemap/', {
           coordinates: (dogPoisonCoordConfirmed[0].join(', ')),
-          type_of_poison: typeOfPoison,
-          cleared: cleared
+          type_of_poison: typeOfPoison ? typeOfPoison : 'unknown',
+          cleared: cleared ? cleared : false
         })};
     }, [dogPoisonCoordConfirmed])
     
