@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MapGL, {Marker} from 'react-map-gl';
+import MapGL, {Marker, Popup} from 'react-map-gl';
 import Geocoder from "react-map-gl-geocoder";
 import Coordinates from '../coordinates'
 import axios from 'axios';
@@ -27,6 +27,7 @@ export default function Map({ children, ...restProps }) {
       const [cleared, setCleared] = useState('')
       const [dbState, setDbState] = useState([])
 
+
       const coordListElements = dbState.map(item => {
         let [coord1, coord2] = item.coordinates.split(',')
         coord1 = Number(coord1)
@@ -48,6 +49,22 @@ export default function Map({ children, ...restProps }) {
           )
         }
       )
+
+      function CustomPopup(item, coord1, coord2, closePopup) {
+        return (
+          <Popup
+            latitude={coord1}
+            longitude={coord2}
+            onClose={closePopup}
+            closeButton={true}
+            closeOnClick={false}
+            offsetTop={-30}
+           >
+            <p>{item.coordinates}</p>
+            <p>{item.type_of_poison}</p>
+            <p>{item.cleared}</p>
+          </Popup>
+        )};
 
 
       const handleViewportChange = useCallback(
