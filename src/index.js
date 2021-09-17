@@ -8,8 +8,8 @@ import Map from './components/MapGL'
 function Root() {
   return (
     <div style={{ height: "100vh" }}>
+      <h1>map project</h1>
       <App />
-      <Map />
     </div>
   );
 }
