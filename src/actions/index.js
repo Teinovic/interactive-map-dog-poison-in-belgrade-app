@@ -1,7 +1,7 @@
 export const fetchData = data => {
 
     return {
-        type: 'DATA',
+        type: 'DATA_SELECTED',
         payload: data
     }
 }

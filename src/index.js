@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
 import App from './App';
-import Map from './components/MapGL'
+import reducers from './reducers';
 
 
 
@@ -9,7 +12,9 @@ function Root() {
   return (
     <div style={{ height: "100vh" }}>
       <h1>map project</h1>
-      <App />
+      <Provider store={createStore(reducers)}>
+        <App />
+      </Provider>
     </div>
   );
 }

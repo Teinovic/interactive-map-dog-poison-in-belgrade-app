@@ -1,8 +1,9 @@
 import MarkerPopup from "../../components/markerPopup";
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import { connect } from 'react-redux'
 
-export default function MarkerPopupContainer(props) {
+function MarkerPopupContainer(props) {
 
     const [dogPoisonCoordToDelete, setDogPoisonCoordToDelete] = useState('')
 
@@ -79,3 +80,11 @@ export default function MarkerPopupContainer(props) {
         </MarkerPopup>
     )
 }
+
+const mapStateToProps = (state) => {
+    console.log(state, 'woohoo')
+
+    return state
+}
+
+export default connect(mapStateToProps)(MarkerPopupContainer) 

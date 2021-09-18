@@ -27,7 +27,6 @@ export default function Map({ children, ...restProps }) {
       const [cleared, setCleared] = useState('')
       const [dbState, setDbState] = useState([])
       const [popup, togglePopup] = useState(false)
-      console.log(dbState)
 
       let found = dbState.find(element => element.id === popup)
 
